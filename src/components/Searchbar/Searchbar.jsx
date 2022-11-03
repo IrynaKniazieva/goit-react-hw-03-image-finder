@@ -3,6 +3,13 @@ import styles from './Searchbar.module.css'
 // import {ReactComponent as SearchIcon} from '../icons/search.svg';
 
 class Searchbar extends React.Component {
+  state = {
+    imagesName: '',
+  }
+
+  handeleNameChange = e => {
+    this.setState({imagesName: e.currentTarget.value.toLoverCase()});
+  }
     render () {
         return (
             <header className={styles.searchbar}>
