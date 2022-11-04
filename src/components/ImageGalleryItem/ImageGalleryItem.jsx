@@ -2,11 +2,11 @@ import React from "react"
 import styles from './ImageGalleryItem.module.css'
 // import PropTypes from "prop-types"
 
-const ImageGalleryItem = ({images,}) => (
+const ImageGalleryItem = ({images}) => (
     <> 
         {images.map(({ webformatURL, id}) => (
-            <li key={id} className={}>
-                <img src="" alt="" />
+            <li key={id} className={styles.imageGalleryItem}>
+                <img className={styles.imageGalleryItemImage} src={webformatURL} alt="" />
             </li>
         ))}
     </>
@@ -17,4 +17,4 @@ const ImageGalleryItem = ({images,}) => (
 //     onDeleteContact: PropTypes.func.isRequired,  
 //   };
 
-export default ContactItem
+export default ImageGalleryItem;

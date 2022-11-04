@@ -4,11 +4,11 @@ import styles from './Searchbar.module.css'
 
 class Searchbar extends React.Component {
   state = {
-    imagesName: '',
+    webformatURL: '',
   }
 
   handeleNameChange = e => {
-    this.setState({imagesName: e.currentTarget.value.toLoverCase()});
+    this.setState({webformatURL: e.currentTarget.value.toLoverCase()});
   }
     render () {
         return (
