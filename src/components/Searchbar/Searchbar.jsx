@@ -4,27 +4,34 @@ import styles from './Searchbar.module.css'
 
 class Searchbar extends React.Component {
   state = {
-    webformatURL: '',
+    imagesName: '',
   }
 
-  handeleNameChange = e => {
-    this.setState({webformatURL: e.currentTarget.value.toLoverCase()});
+  handleNameChange = e => {
+    this.setState({imagesName: e.currentTarget.value.toLoverCase()});
+  }
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.setState({ imagesName: '' });
   }
     render () {
         return (
             <header className={styles.searchbar}>
-  <form class="form">
+  <form onSubmit={this.handleSubmit}>
     <button type="submit" class="button">
         {/* <SearchIcon width="20" height="20"/> */}
       <span class="button-label">Search</span>
     </button>
 
     <input
-      class="input"
       type="text"
-      autocomplete="off"
-      autofocus
+      name="imageName"
+      // autocomplete="off"
+      // autofocus
       placeholder="Search images and photos"
+      value={this.state.images}
+      onChange={this.handleNameChange}
     />
   </form>
 </header>

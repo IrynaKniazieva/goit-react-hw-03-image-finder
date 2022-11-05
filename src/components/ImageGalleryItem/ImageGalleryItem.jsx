@@ -5,8 +5,8 @@ import styles from './ImageGalleryItem.module.css'
 const ImageGalleryItem = ({images}) => (
     <> 
         {images.map(({ webformatURL, id}) => (
-            <li key={id} className={styles.imageGalleryItem}>
-                <img className={styles.imageGalleryItemImage} src={webformatURL} alt="" />
+            <li key={id} className={styles.imageGalleryItem} >
+                <img className={styles.imageGalleryItemImage} src={webformatURL} alt=""/>
             </li>
         ))}
     </>
