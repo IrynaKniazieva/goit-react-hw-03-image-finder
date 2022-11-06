@@ -73,7 +73,7 @@ class App extends React.Component {
     this.setState({keyWord: keyWord});
   }
 
-  omImageClick = (largeImageURL) => {
+  ImageClick = (largeImageURL) => {
     this.setState({largeImageSrc: largeImageURL});
   }
 
@@ -88,8 +88,8 @@ class App extends React.Component {
         {loading && <p>Загружаю...</p>}
         {/* {images.length > 0 && <ImageGallery images={images} />} */}
         {images.length > 0 && <ImageGallery>
-          <ImageGalleryItem onClick={this.omImageClick}
-            keyWord={this.state.keyWord}
+          <ImageGalleryItem 
+            onSelect={this.ImageClick}
             images={images} />
         </ImageGallery>}
         <Button/>
