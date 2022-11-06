@@ -4,9 +4,14 @@ import styles from './ImageGalleryItem.module.css'
 
 const ImageGalleryItem = ({images}) => (
     <> 
-        {images.map(({ webformatURL, id}) => (
+        {images.map(({ largeImageURL, webformatURL, id}) => (
             <li key={id} className={styles.imageGalleryItem} >
-                <img className={styles.imageGalleryItemImage} src={webformatURL} alt=""/>
+                <a href={largeImageURL}>
+                <img className={styles.imageGalleryItemImage} 
+                src={webformatURL} 
+                alt=""/>
+                </a>
+                
             </li>
         ))}
     </>
