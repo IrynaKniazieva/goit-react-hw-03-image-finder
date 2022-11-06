@@ -21,7 +21,7 @@ componentWillUnmount() {
 handleKeyDowm = e => {
     if(e.code === 'Escape') {
         console.log('ESK');
-        this.props.onClose();
+        this.props.closeModal();
     }
 }
 
@@ -29,15 +29,17 @@ handleKeyDowm = e => {
 handleBackdropClick = e => {
     console.log("Backdrop");
     if(e.currentTarget === e.target) {
-        this.props.onClose();
+        this.props.closeModal();
     }
 }
 
 render() {
+    const {imageModal} = this.props
+  
     return createPortal(
       <div className={styles.modalBackdrop} onClick={this.handleBackdropClick}>
         <div className={styles.modalContent}>{this.props.children}
-          <img src="" alt="" />
+          <img src={imageModal} alt="" />
         </div>
       </div>, modalRoot,
     );

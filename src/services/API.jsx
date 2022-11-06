@@ -1,27 +1,32 @@
-import axios from "axios";
+// import axios from "axios";
 
-const BASE_URL = 'https://pixabay.com/api/';
-const API_KEY = '';
+// axios.defaults.baseURL = 'https://pixabay.com/api/'
+// // const BASE_URL = 'https://pixabay.com/api/';
+// const API_KEY = '30111831-2eef1cdbdbde188a842c8e9ba';
 
-export const fetchImagesWithQuery = async searchQuery => {
-    const response = axios.get('/search?query={searchQuery}');
-    return response.data.hits;
-};
-
-export default {
-    fetchImagesWithQuery,
-}
+// export const fetchImagesWithQuery = async (searchQuery, page) => {
+//     const { data } = await axios.get(`?q=${searchQuery}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`)
+//     return data 
+// };
 
 import axios from 'axios';
 
-axios.defaults.baseURL = 'https://api.themoviedb.org/3/';
-const API_KEY = '0214e4f6556edfc65f2eadfc23b43510';
+const BASE_URL = 'https://pixabay.com/api/';
+const API_KEY = '30111831-2eef1cdbdbde188a842c8e9ba';
 
-export const fetchMovies = page => {
-  return axios('trending/movie/day', {
+export const fetchImagesWithQuery = async searchQuery => {
+  const responce = await axios.get(BASE_URL, {
     params: {
-      api_key: API_KEY,
-      page,
+      q: searchQuery,
+      page: '1',
+      key: API_KEY,
+      image_type: 'photo',
+      orientation: 'horizontal',
+      per_page: '12',
     },
   });
+  return responce;
 };
+
+
+

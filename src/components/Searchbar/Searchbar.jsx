@@ -4,21 +4,23 @@ import styles from './Searchbar.module.css'
 
 class Searchbar extends React.Component {
   state = {
-    imagesName: '',
+    searchQuery: "",
   }
 
-  handleNameChange = e => {
-    this.setState({imagesName: e.currentTarget.value.toLoverCase()});
+  handleSearchQueryChange = e => {
+    const { name, value } = e.currentTarget;
+    this.setState({ [name]: value });
   }
 
-  handleSubmit = e => {
+  handleSearchQuerySubmit = e => {
     e.preventDefault();
-    this.setState({ imagesName: '' });
+    this.props.onSubmit(this.state.searchQuery);
+    
   }
     render () {
         return (
             <header className={styles.searchbar}>
-  <form onSubmit={this.handleSubmit}>
+  <form onSubmit={this.handleSearchQuerySubmit}>
     <button type="submit" class="button">
         {/* <SearchIcon width="20" height="20"/> */}
       <span class="button-label">Search</span>
@@ -26,12 +28,13 @@ class Searchbar extends React.Component {
 
     <input
       type="text"
-      name="imageName"
-      // autocomplete="off"
-      // autofocus
+      name="searchQuery"
+      autocomplete="off"
+      autofocus
       placeholder="Search images and photos"
-      value={this.state.images}
-      onChange={this.handleNameChange}
+      value={this.state.searchQuery}
+      onChange={this.handleSearchQueryChange}
+      
     />
   </form>
 </header>
