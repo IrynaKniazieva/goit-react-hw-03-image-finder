@@ -5,11 +5,11 @@ import styles from './Searchbar.module.css'
 
 class Searchbar extends React.Component {
   state = {
-    searchQuery: "",
+    query: "",
   }
 
   handleSearchQueryChange = e => {
-    this.setState({searchQuery: e.currentTarget.value.toLowerCase()});
+    this.setState({query: e.currentTarget.value.toLowerCase()});
     // const { name, value } = e.currentTarget;
     // this.setState({ [name]: value });
     // console.log(this.state.searchQuery);
@@ -18,13 +18,13 @@ class Searchbar extends React.Component {
 
   handleSearchQuerySubmit = e => {
     e.preventDefault();
-    if (this.state.searchQuery.trim() === "") {
+    if (this.state.query.trim() === "") {
       alert("Введите название картинок");
       // toast.error("Wow so easy!");
       return;
     }
-    this.props.onSubmit(this.state.searchQuery);
-    this.setState({searchQuery: ""});
+    this.props.onSubmit(this.state.query);
+    this.setState({query: ""});
    
     
   }
@@ -39,11 +39,11 @@ class Searchbar extends React.Component {
 
     <input
       type="text"
-      name="searchQuery"
+      name="query"
       autocomplete="off"
       autofocus
       placeholder="Search images and photos"
-      value={this.state.searchQuery}
+      value={this.state.query}
       onChange={this.handleSearchQueryChange}
       
     />

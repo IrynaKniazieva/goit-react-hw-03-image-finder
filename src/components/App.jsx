@@ -18,52 +18,64 @@ import { fetchImagesWithQuery } from "../services/API";
 class App extends React.Component {
   state = {
     images: [],
-    
+    status: 'idle',
     loading: false,
     error: null,
     page: 1,
-    searchQuery: "",
+    query: "",
     largeImage: "",
-
   };
+
+
 
   // async componentDidMount() {
   //   const response = await axios.get("/search?query=react");
   //   this.setState({ images: response.data.hits });
   // }
 
-  async componentDidMount() {
-
-    this.setState({ loading: true });
-    try {
-      const images = await fetchImagesWithQuery();
-      const {data: { hits },} = images;
-      this.setState({images: hits});
-      
-    } catch (error) {
-      this.setState({ error });
-    } finally {
-      this.setState({ loading: false });
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { searchQuery, page } = this.state
-    if ((prevState.searchQuery !== searchQuery) || prevState.page !== page) {
-      
-    }
-  }
-
-
-  componentWillUnmount() {
-    // console.log('Modal componentWillUnmount');
-  }
-  
-  // getImages = () => {
+  // async getImages() {
   //   const {page} = this.state;
+  //   const {query} = this.state;
   //   this.setState({
   //     loading: true,
   //   });
+  //   try {
+  //     const images = await fetchImagesWithQuery(query, page);
+  //     const {data: { hits },} = images;
+  //     this.setState({images: hits});
+      
+  //   } catch (error) {
+  //     this.setState({ error });
+  //   } finally {
+  //     this.setState({ loading: false });
+  //   }
+  // }
+
+  async componentDidUpdate(prevProps, prevState) {
+   const prevQuery = prevState.query;
+   const prevPage = prevState.page;
+   const { query, page } = this.state;
+   
+   if (prevQuery !== query || prevPage !== page) {
+     this.setState({ status: 'pending' });
+
+     try { 
+      const images = await fetchImagesWithQuery(query, page);
+      const {data: { hits },} = images;
+      this.setState({images: hits, status: 'resolve'});
+
+     }catch (error) {
+      this.setState({ error, status: 'rejected' });
+   }
+  }}
+
+
+
+  // componentWillUnmount() {
+  //   // console.log('Modal componentWillUnmount');
+  // }
+  
+  
 
   //   fetchImagesWithQuery(page)
   //     .then(({ data }) => {
@@ -83,8 +95,8 @@ class App extends React.Component {
 
   // }
 
-  handleFormSubmit = searchQuery => {
-    this.setState({ searchQuery, page: 1 });
+  handleFormSubmit = query => {
+    this.setState({ query, page: 1 });
     // console.log(searchQuery);
   }
 
@@ -110,10 +122,14 @@ class App extends React.Component {
     return (
       <>
         <Searchbar onSubmit={this.handleFormSubmit} />
+        {/* <p>{this.state.searchQuery}</p> */}
+        
+
         {error && <p>Whoops, something went wrong: {error.message}</p>}
         {loading && <p>Загружаю...</p>}
         {images.length > 0 && (
-          <ImageGallery searchQuery={this.state.searchQuery}>
+        // <p>{this.state.searchQuery}</p>
+          <ImageGallery query={this.state.query}>
             <ImageGalleryItem onSelect={this.ImageClick} images={images} />
           </ImageGallery>
         )}
