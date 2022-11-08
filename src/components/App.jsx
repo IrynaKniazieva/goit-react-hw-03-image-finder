@@ -1,4 +1,5 @@
 import React from "react"
+// import { ToastContainer } from "react-toastify";
 import Modal from "./Modal/Modal";
 import Searchbar from "./Searchbar/Searchbar";
 import ImageGallery from "./ImageGallery/ImageGallery";
@@ -26,6 +27,11 @@ class App extends React.Component {
 
   };
 
+  // async componentDidMount() {
+  //   const response = await axios.get("/search?query=react");
+  //   this.setState({ images: response.data.hits });
+  // }
+
   async componentDidMount() {
 
     this.setState({ loading: true });
@@ -41,12 +47,12 @@ class App extends React.Component {
     }
   }
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   const { searchQuery, page } = this.state
-  //   if ((prevState.searchQuery !== searchQuery && searchQuery) || prevState.page !== page) {
-  //     this.getImages();
-  //   }
-  // }
+  componentDidUpdate(prevProps, prevState) {
+    const { searchQuery, page } = this.state
+    if ((prevState.searchQuery !== searchQuery) || prevState.page !== page) {
+      
+    }
+  }
 
 
   componentWillUnmount() {
@@ -79,6 +85,7 @@ class App extends React.Component {
 
   handleFormSubmit = searchQuery => {
     this.setState({ searchQuery, page: 1 });
+    // console.log(searchQuery);
   }
 
   loadMore = () => {
@@ -106,7 +113,7 @@ class App extends React.Component {
         {error && <p>Whoops, something went wrong: {error.message}</p>}
         {loading && <p>Загружаю...</p>}
         {images.length > 0 && (
-          <ImageGallery>
+          <ImageGallery searchQuery={this.state.searchQuery}>
             <ImageGalleryItem onSelect={this.ImageClick} images={images} />
           </ImageGallery>
         )}
@@ -118,6 +125,7 @@ class App extends React.Component {
             <Modal imageModal={largeImage} closeModal={this.onClose} />
           )}
         </div>
+        {/* <ToastContainer autoClose={3000}/> */}
       </>
     );
   }

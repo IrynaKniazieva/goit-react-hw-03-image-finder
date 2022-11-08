@@ -1,5 +1,6 @@
 import React from "react"
 import styles from './Searchbar.module.css'
+// import { toast } from 'react-toastify';
 // import {ReactComponent as SearchIcon} from '../icons/search.svg';
 
 class Searchbar extends React.Component {
@@ -8,13 +9,23 @@ class Searchbar extends React.Component {
   }
 
   handleSearchQueryChange = e => {
-    const { name, value } = e.currentTarget;
-    this.setState({ [name]: value });
+    this.setState({searchQuery: e.currentTarget.value.toLowerCase()});
+    // const { name, value } = e.currentTarget;
+    // this.setState({ [name]: value });
+    // console.log(this.state.searchQuery);
+    
   }
 
   handleSearchQuerySubmit = e => {
     e.preventDefault();
+    if (this.state.searchQuery.trim() === "") {
+      alert("Введите название картинок");
+      // toast.error("Wow so easy!");
+      return;
+    }
     this.props.onSubmit(this.state.searchQuery);
+    this.setState({searchQuery: ""});
+   
     
   }
     render () {
@@ -23,7 +34,7 @@ class Searchbar extends React.Component {
   <form onSubmit={this.handleSearchQuerySubmit}>
     <button type="submit" class="button">
         {/* <SearchIcon width="20" height="20"/> */}
-      <span class="button-label">Search</span>
+      <span>Search</span>
     </button>
 
     <input
