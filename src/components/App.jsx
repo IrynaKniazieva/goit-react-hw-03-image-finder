@@ -68,7 +68,7 @@ class App extends React.Component {
   };
 
   render() {
-    const { images, loading, error, largeImage, status } = this.state;
+    const { images, error, largeImage, status } = this.state;
     // ----початок пуста сторінка----
     if (status === 'idle') {
       return (
