@@ -20,6 +20,7 @@ class App extends React.Component {
     loading: false,
     error: null,
     page: 1,
+    maxImg: 12,
     query: '',
     largeImage: '',
     showButton: false,
@@ -29,17 +30,30 @@ class App extends React.Component {
   async componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevState.query;
     const prevPage = prevState.page;
-    const { query, page } = this.state;
+    const { query, page, maxImg } = this.state;
 
     if (prevQuery !== query || prevPage !== page) {
       this.setState({ status: 'pending' });
 
       try {
-        const images = await fetchImagesWithQuery(query, page);
-        const {
-          data: { hits },
-        } = images;
-        this.setState({ images: hits, status: 'resolved' });
+        const res = await fetchImagesWithQuery(query, page);
+        
+        // const {
+        //   data: { hits },
+        // } = images;
+        
+
+        if (res.total > maxImg) {
+          this.setState({ showButton: true });
+        } else {
+          this.setState({ showButton: false });
+        }
+
+        this.setState(prevState => ({
+          images: [...prevState.images, ...res.data.hits], status: 'resolved'
+        }))
+        
+        // this.setState({ images: hits, status: 'resolved' });
       } catch (error) {
         this.setState({ error, status: 'rejected' });
       }
@@ -48,7 +62,7 @@ class App extends React.Component {
 
 
   handleFormSubmit = query => {
-    this.setState({ query, page: 1 });
+    this.setState({ query, page: 1});
   };
 
   loadMore = () => {
@@ -145,3 +159,24 @@ export default App;
     //     {/* <ToastContainer autoClose={3000}/> */}
     //   </>
     // );
+
+
+    // async componentDidUpdate(prevProps, prevState) {
+    //   const prevQuery = prevState.query;
+    //   const prevPage = prevState.page;
+    //   const { query, page } = this.state;
+  
+    //   if (prevQuery !== query || prevPage !== page) {
+    //     this.setState({ status: 'pending' });
+  
+    //     try {
+    //       const images = await fetchImagesWithQuery(query, page);
+    //       const {
+    //         data: { hits },
+    //       } = images;
+    //       this.setState({ images: hits, status: 'resolved' });
+    //     } catch (error) {
+    //       this.setState({ error, status: 'rejected' });
+    //     }
+    //   }
+    // }
