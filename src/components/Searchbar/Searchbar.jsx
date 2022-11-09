@@ -1,5 +1,6 @@
 import React from "react"
 import styles from './Searchbar.module.css'
+
 // import { toast } from 'react-toastify';
 // import {ReactComponent as SearchIcon} from '../icons/search.svg';
 
@@ -19,7 +20,7 @@ class Searchbar extends React.Component {
   handleSearchQuerySubmit = e => {
     e.preventDefault();
     if (this.state.query.trim() === "") {
-      alert("Введите название картинок");
+      alert("Enter a valid name");
       // toast.error("Wow so easy!");
       return;
     }
@@ -32,16 +33,16 @@ class Searchbar extends React.Component {
         return (
             <header className={styles.searchbar}>
   <form onSubmit={this.handleSearchQuerySubmit}>
-    <button type="submit" class="button">
-        {/* <SearchIcon width="20" height="20"/> */}
+    <button type="submit">
+        
       <span>Search</span>
     </button>
 
     <input
       type="text"
       name="query"
-      autocomplete="off"
-      autofocus
+      autoComplete="off"
+      autoFocus
       placeholder="Search images and photos"
       value={this.state.query}
       onChange={this.handleSearchQueryChange}

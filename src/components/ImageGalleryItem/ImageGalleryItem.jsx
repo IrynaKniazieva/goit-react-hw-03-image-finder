@@ -1,6 +1,6 @@
 import React from "react"
 import styles from './ImageGalleryItem.module.css'
-// import PropTypes from "prop-types"
+import PropTypes from "prop-types"
 
 const ImageGalleryItem = ({images, onSelect}) => (
     <> 
@@ -17,9 +17,9 @@ const ImageGalleryItem = ({images, onSelect}) => (
     </>
 )
 
-// ContactItem.propTypes = {
-//     contacts: PropTypes.array.isRequired,
-//     onDeleteContact: PropTypes.func.isRequired,  
-//   };
+ImageGalleryItem.propTypes = {
+    contacts: PropTypes.array.isRequired,
+    onDeleteContact: PropTypes.func.isRequired,  
+  };
 
 export default ImageGalleryItem;

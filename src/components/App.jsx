@@ -1,13 +1,13 @@
 import React from "react"
-// import { ToastContainer } from "react-toastify";
+
 import Modal from "./Modal/Modal";
 import Searchbar from "./Searchbar/Searchbar";
 import ImageGallery from "./ImageGallery/ImageGallery";
 import ImageGalleryItem from "./ImageGalleryItem/ImageGalleryItem";
 import Button from "./Button/Button";
 import Loader from "./Loader/Loader";
-import MessageError from "./MessageError/MessageError"
-
+// import MessageError from "./MessageError/MessageError"
+// import { ToastContainer } from "react-toastify";
 // import axios from "axios";
 import { fetchImagesWithQuery } from "../services/API";
 
@@ -20,40 +20,28 @@ class App extends React.Component {
     loading: false,
     error: null,
     page: 1,
-    maxImg: 12,
     query: '',
     largeImage: '',
     showButton: false,
+    totalHits: 0,
   };
 
   
   async componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevState.query;
     const prevPage = prevState.page;
-    const { query, page, maxImg } = this.state;
+    const { query, page } = this.state;
 
     if (prevQuery !== query || prevPage !== page) {
       this.setState({ status: 'pending' });
 
       try {
         const res = await fetchImagesWithQuery(query, page);
-        
-        // const {
-        //   data: { hits },
-        // } = images;
-        
-
-        if (res.total > maxImg) {
-          this.setState({ showButton: true });
-        } else {
-          this.setState({ showButton: false });
-        }
-
+      
         this.setState(prevState => ({
-          images: [...prevState.images, ...res.data.hits], status: 'resolved'
+          images: [...prevState.images, ...res.data.hits], totalHits: res.data.totalHits, query: query, status: 'resolved'
         }))
         
-        // this.setState({ images: hits, status: 'resolved' });
       } catch (error) {
         this.setState({ error, status: 'rejected' });
       }
@@ -62,7 +50,7 @@ class App extends React.Component {
 
 
   handleFormSubmit = query => {
-    this.setState({ query, page: 1});
+    this.setState({ query, page: 1, images: []});
   };
 
   loadMore = () => {
@@ -82,14 +70,13 @@ class App extends React.Component {
   };
 
   render() {
-    const { images, error, largeImage, status } = this.state;
+    const { images, error, largeImage, status, totalHits } = this.state;
     // ----початок пуста сторінка----
     if (status === 'idle') {
       return (
         <div>
           <Searchbar onSubmit={this.handleFormSubmit} />
-          <MessageError message={"Введіть назву для пошуку"}/>
-          {/* <div>Введіть назву для пошуку</div> */}
+          {/* <MessageError message={"Введіть назву для пошуку"}/> */}
         </div>
       );
     }
@@ -108,7 +95,8 @@ class App extends React.Component {
         <div>
           <Searchbar onSubmit={this.handleFormSubmit} />
           {error && <p>Whoops, something went wrong: {error.message}</p>}
-          {/* <MessageError message={error.message} /> */}
+          
+          
         </div>
       );
     }
@@ -123,7 +111,9 @@ class App extends React.Component {
           {largeImage.length > 0 && (
             <Modal imageModal={largeImage} closeModal={this.onClose} />
           )}
-          <Button text="Load More..." clickHandler={this.loadMore} />
+          
+          {images.length !== totalHits && (<Button text="Load More..." clickHandler={this.loadMore} />)}
+          
         </div>
       );
     }   

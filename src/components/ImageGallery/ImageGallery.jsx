@@ -1,16 +1,15 @@
 import React from "react"
 import styles from "./ImageGallery.module.css"
-// import PropTypes from "prop-types"
+import PropTypes from "prop-types"
 
 const ImageGallery = ({children}) => (
     <ul className={styles.imageGallery}>{children}</ul>
-
 )
 
 
-// ImageGallery.propTypes = {
-//     children: PropTypes.node.isRequired,
-//   };
+ImageGallery.propTypes = {
+    children: PropTypes.node.isRequired,
+  };
 
 export default ImageGallery;
 
