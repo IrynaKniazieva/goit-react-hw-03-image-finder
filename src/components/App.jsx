@@ -5,13 +5,11 @@ import Searchbar from "./Searchbar/Searchbar";
 import ImageGallery from "./ImageGallery/ImageGallery";
 import ImageGalleryItem from "./ImageGalleryItem/ImageGalleryItem";
 import Button from "./Button/Button";
+import Loader from "./Loader/Loader";
+import MessageError from "./MessageError/MessageError"
 
 // import axios from "axios";
 import { fetchImagesWithQuery } from "../services/API";
-// import ImageGallery from "./ImageGallery/ImageGallery";
-
-
-// axios.defaults.baseURL = "https://pixabay.com/api/?q=cat&page=1&key=30111831-2eef1cdbdbde188a842c8e9ba&image_type=photo&orientation=horizontal&per_page=12";
 
 
 
@@ -22,83 +20,36 @@ class App extends React.Component {
     loading: false,
     error: null,
     page: 1,
-    query: "",
-    largeImage: "",
+    query: '',
+    largeImage: '',
+    showButton: false,
   };
 
-
-
-  // async componentDidMount() {
-  //   const response = await axios.get("/search?query=react");
-  //   this.setState({ images: response.data.hits });
-  // }
-
-  // async getImages() {
-  //   const {page} = this.state;
-  //   const {query} = this.state;
-  //   this.setState({
-  //     loading: true,
-  //   });
-  //   try {
-  //     const images = await fetchImagesWithQuery(query, page);
-  //     const {data: { hits },} = images;
-  //     this.setState({images: hits});
-      
-  //   } catch (error) {
-  //     this.setState({ error });
-  //   } finally {
-  //     this.setState({ loading: false });
-  //   }
-  // }
-
+  
   async componentDidUpdate(prevProps, prevState) {
-   const prevQuery = prevState.query;
-   const prevPage = prevState.page;
-   const { query, page } = this.state;
-   
-   if (prevQuery !== query || prevPage !== page) {
-     this.setState({ status: 'pending' });
+    const prevQuery = prevState.query;
+    const prevPage = prevState.page;
+    const { query, page } = this.state;
 
-     try { 
-      const images = await fetchImagesWithQuery(query, page);
-      const {data: { hits },} = images;
-      this.setState({images: hits, status: 'resolve'});
+    if (prevQuery !== query || prevPage !== page) {
+      this.setState({ status: 'pending' });
 
-     }catch (error) {
-      this.setState({ error, status: 'rejected' });
-   }
-  }}
+      try {
+        const images = await fetchImagesWithQuery(query, page);
+        const {
+          data: { hits },
+        } = images;
+        this.setState({ images: hits, status: 'resolved' });
+      } catch (error) {
+        this.setState({ error, status: 'rejected' });
+      }
+    }
+  }
 
-
-
-  // componentWillUnmount() {
-  //   // console.log('Modal componentWillUnmount');
-  // }
-  
-  
-
-  //   fetchImagesWithQuery(page)
-  //     .then(({ data }) => {
-  //       this.setState(prevState => ({
-  //         images: [...prevState.images, ...data.hits],
-  //       }));
-  //     })
-  //     .catch(error => {
-  //       console.log(error.message);
-  //     })
-  //     .finally(() => {
-  //       this.setState({
-  //         loading: false,
-  //       });
-  //     });
-   
-
-  // }
 
   handleFormSubmit = query => {
     this.setState({ query, page: 1 });
-    // console.log(searchQuery);
-  }
+  };
 
   loadMore = () => {
     this.setState(prevState => ({
@@ -106,45 +57,91 @@ class App extends React.Component {
     }));
   };
 
-  ImageClick = (largeImageURL) => {
-    this.setState({largeImage: largeImageURL});
-  }
+  ImageClick = largeImageURL => {
+    this.setState({ largeImage: largeImageURL });
+  };
 
   onClose = () => {
     this.setState({
-      largeImage: "",
+      largeImage: '',
     });
   };
 
   render() {
-    // дестректуризую
-    const { images, loading, error, largeImage } = this.state;
-    return (
-      <>
-        <Searchbar onSubmit={this.handleFormSubmit} />
-        {/* <p>{this.state.searchQuery}</p> */}
-        
-
-        {error && <p>Whoops, something went wrong: {error.message}</p>}
-        {loading && <p>Загружаю...</p>}
-        {images.length > 0 && (
-        // <p>{this.state.searchQuery}</p>
+    const { images, loading, error, largeImage, status } = this.state;
+    // ----початок пуста сторінка----
+    if (status === 'idle') {
+      return (
+        <div>
+          <Searchbar onSubmit={this.handleFormSubmit} />
+          <MessageError message={"Введіть назву для пошуку"}/>
+          {/* <div>Введіть назву для пошуку</div> */}
+        </div>
+      );
+    }
+    // -----Спинер/загрузка-----
+    if (status === 'pending') {
+      return (
+        <div>
+          <Searchbar onSubmit={this.handleFormSubmit} />
+          <Loader />
+        </div>
+      );
+    }
+    // ----якщо помилка-----
+    if (status === 'rejected') {
+      return (
+        <div>
+          <Searchbar onSubmit={this.handleFormSubmit} />
+          {error && <p>Whoops, something went wrong: {error.message}</p>}
+          {/* <MessageError message={error.message} /> */}
+        </div>
+      );
+    }
+    // ----правильний запрос, все працює-----
+    if (status === 'resolved') {
+      return (
+        <div>
+          <Searchbar onSubmit={this.handleFormSubmit} />        
           <ImageGallery query={this.state.query}>
             <ImageGalleryItem onSelect={this.ImageClick} images={images} />
           </ImageGallery>
-        )}
-         {!loading && (
-              <Button text="Load More" clickHandler={this.loadMore} />
-            )}
-        <div>
           {largeImage.length > 0 && (
             <Modal imageModal={largeImage} closeModal={this.onClose} />
           )}
+          <Button text="Load More..." clickHandler={this.loadMore} />
         </div>
-        {/* <ToastContainer autoClose={3000}/> */}
-      </>
-    );
+      );
+    }   
   }
 };
 
 export default App;
+
+
+
+// return (
+    //   <>
+    //     <Searchbar onSubmit={this.handleFormSubmit} />
+    //     {/* <p>{this.state.searchQuery}</p> */}
+
+    //     {error && <p>Whoops, something went wrong: {error.message}</p>}
+        
+    //     {loading && <p>Загружаю...</p>}
+    //     {images.length > 0 && (
+    //     // <p>{this.state.searchQuery}</p>
+    //       <ImageGallery query={this.state.query}>
+    //         <ImageGalleryItem onSelect={this.ImageClick} images={images} />
+    //       </ImageGallery>
+    //     )}
+    //      {!loading && (
+    //           <Button text="Load More" clickHandler={this.loadMore} />
+    //         )}
+    //     <div>
+    //       {largeImage.length > 0 && (
+    //         <Modal imageModal={largeImage} closeModal={this.onClose} />
+    //       )}
+    //     </div>
+    //     {/* <ToastContainer autoClose={3000}/> */}
+    //   </>
+    // );
