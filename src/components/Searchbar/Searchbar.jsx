@@ -1,6 +1,6 @@
 import React from "react"
 import styles from './Searchbar.module.css'
-
+import { GoSearch } from "react-icons/go";
 // import { toast } from 'react-toastify';
 // import {ReactComponent as SearchIcon} from '../icons/search.svg';
 
@@ -32,13 +32,13 @@ class Searchbar extends React.Component {
     render () {
         return (
             <header className={styles.searchbar}>
-  <form onSubmit={this.handleSearchQuerySubmit}>
-    <button type="submit">
-        
-      <span>Search</span>
+  <form className={styles.formHeader} onSubmit={this.handleSearchQuerySubmit}>
+    <button className={styles.buttonHeader} type="submit">
+        <GoSearch/>
+      {/* <span>Search</span> */}
     </button>
 
-    <input
+    <input className={styles.inputHeader}
       type="text"
       name="query"
       autoComplete="off"

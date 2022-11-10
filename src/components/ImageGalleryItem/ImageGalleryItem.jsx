@@ -18,8 +18,8 @@ const ImageGalleryItem = ({images, onSelect}) => (
 )
 
 ImageGalleryItem.propTypes = {
-    contacts: PropTypes.array.isRequired,
-    onDeleteContact: PropTypes.func.isRequired,  
+    images: PropTypes.array.isRequired,
+    onSelect: PropTypes.func.isRequired,  
   };
 
 export default ImageGalleryItem;

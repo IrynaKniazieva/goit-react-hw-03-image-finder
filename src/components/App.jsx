@@ -1,4 +1,5 @@
 import React from "react"
+import styles from './App/App.module.css'
 
 import Modal from "./Modal/Modal";
 import Searchbar from "./Searchbar/Searchbar";
@@ -74,7 +75,7 @@ class App extends React.Component {
     // ----початок пуста сторінка----
     if (status === 'idle') {
       return (
-        <div>
+        <div >
           <Searchbar onSubmit={this.handleFormSubmit} />
           {/* <MessageError message={"Введіть назву для пошуку"}/> */}
         </div>
@@ -83,7 +84,7 @@ class App extends React.Component {
     // -----Спинер/загрузка-----
     if (status === 'pending') {
       return (
-        <div>
+        <div className={styles.app}>
           <Searchbar onSubmit={this.handleFormSubmit} />
           <Loader />
         </div>
