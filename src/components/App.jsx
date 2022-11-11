@@ -4,7 +4,7 @@ import styles from './App/App.module.css'
 import Modal from "./Modal/Modal";
 import Searchbar from "./Searchbar/Searchbar";
 import ImageGallery from "./ImageGallery/ImageGallery";
-import ImageGalleryItem from "./ImageGalleryItem/ImageGalleryItem";
+// import ImageGalleryItem from "./ImageGalleryItem/ImageGalleryItem";
 import Button from "./Button/Button";
 import Loader from "./Loader/Loader";
 // import MessageError from "./MessageError/MessageError"
@@ -105,10 +105,12 @@ class App extends React.Component {
     if (status === 'resolved') {
       return (
         <div>
-          <Searchbar onSubmit={this.handleFormSubmit} />        
-          <ImageGallery query={this.state.query}>
+          <Searchbar onSubmit={this.handleFormSubmit} />  
+          <ImageGallery onSelect={this.ImageClick} images={images}/>
+                
+          {/* <ImageGallery query={this.state.query}>
             <ImageGalleryItem onSelect={this.ImageClick} images={images} />
-          </ImageGallery>
+          </ImageGallery> */}
           {largeImage.length > 0 && (
             <Modal imageModal={largeImage} closeModal={this.onClose} />
           )}
