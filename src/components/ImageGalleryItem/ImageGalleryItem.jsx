@@ -13,13 +13,15 @@ const ImageGalleryItem = ({ largeImageURL, webformatURL, id, onSelect }) => (
 );
 
 ImageGalleryItem.propTypes = {
+  id: PropTypes.number,
   largeImageURL: PropTypes.string.isRequired,
   webformatURL: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
   onSelect: PropTypes.func.isRequired,
 };
 
 export default ImageGalleryItem;
+
+
 
 // const ImageGalleryItem = ({images, onSelect}) => (
 //     <>

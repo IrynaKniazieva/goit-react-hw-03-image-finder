@@ -1,14 +1,13 @@
 import PropTypes from 'prop-types';
 
-const MessageError = ({message}) => (
-    <div>
+const MessageError = ({ message }) => (
+  <div>
     <p>{message}</p>
-    </div>
-
-)
+  </div>
+);
 
 MessageError.propTypes = {
-    message: PropTypes.string.isRequired,
-  };
+  message: PropTypes.string.isRequired,
+};
 
 export default MessageError;

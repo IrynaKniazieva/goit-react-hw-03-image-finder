@@ -1,16 +1,11 @@
 import React from "react"
-import styles from './App/App.module.css'
-
-import Modal from "./Modal/Modal";
-import Searchbar from "./Searchbar/Searchbar";
-import ImageGallery from "./ImageGallery/ImageGallery";
-// import ImageGalleryItem from "./ImageGalleryItem/ImageGalleryItem";
-import Button from "./Button/Button";
-import Loader from "./Loader/Loader";
-// import MessageError from "./MessageError/MessageError"
-// import { ToastContainer } from "react-toastify";
-// import axios from "axios";
-import { fetchImagesWithQuery } from "../services/API";
+import { Section } from './App.styled';
+import Modal from "../Modal/Modal";
+import Searchbar from "../Searchbar/Searchbar";
+import ImageGallery from "../ImageGallery/ImageGallery";
+import Button from "../Button/Button";
+import Loader from "../Loader/Loader";
+import { fetchImagesWithQuery } from "services/API";
 
 
 
@@ -27,7 +22,6 @@ class App extends React.Component {
     totalHits: 0,
   };
 
-  
   async componentDidUpdate(prevProps, prevState) {
     const prevQuery = prevState.query;
     const prevPage = prevState.page;
@@ -38,20 +32,21 @@ class App extends React.Component {
 
       try {
         const res = await fetchImagesWithQuery(query, page);
-      
+
         this.setState(prevState => ({
-          images: [...prevState.images, ...res.data.hits], totalHits: res.data.totalHits, query: query, status: 'resolved'
-        }))
-        
+          images: [...prevState.images, ...res.data.hits],
+          totalHits: res.data.totalHits,
+          query: query,
+          status: 'resolved',
+        }));
       } catch (error) {
         this.setState({ error, status: 'rejected' });
       }
     }
   }
 
-
   handleFormSubmit = query => {
-    this.setState({ query, page: 1, images: []});
+    this.setState({ query, page: 1, images: [] });
   };
 
   loadMore = () => {
@@ -75,53 +70,48 @@ class App extends React.Component {
     // ----початок пуста сторінка----
     if (status === 'idle') {
       return (
-        <div >
+        <Section>
           <Searchbar onSubmit={this.handleFormSubmit} />
           {/* <MessageError message={"Введіть назву для пошуку"}/> */}
-        </div>
+        </Section>
       );
     }
     // -----Спинер/загрузка-----
     if (status === 'pending') {
       return (
-        <div className={styles.app}>
+        <Section>
           <Searchbar onSubmit={this.handleFormSubmit} />
+          <ImageGallery onSelect={this.ImageClick} images={images} />
           <Loader />
-        </div>
+        </Section>
       );
     }
     // ----якщо помилка-----
     if (status === 'rejected') {
       return (
-        <div>
+        <Section>
           <Searchbar onSubmit={this.handleFormSubmit} />
           {error && <p>Whoops, something went wrong: {error.message}</p>}
-          
-          
-        </div>
+        </Section>
       );
     }
     // ----правильний запрос, все працює-----
     if (status === 'resolved') {
       return (
-        <div>
-          <Searchbar onSubmit={this.handleFormSubmit} />  
-          <ImageGallery onSelect={this.ImageClick} images={images}/>
-                
-          {/* <ImageGallery query={this.state.query}>
-            <ImageGalleryItem onSelect={this.ImageClick} images={images} />
-          </ImageGallery> */}
+        <Section>
+          <Searchbar onSubmit={this.handleFormSubmit} />
+          <ImageGallery onSelect={this.ImageClick} images={images} />
           {largeImage.length > 0 && (
             <Modal imageModal={largeImage} closeModal={this.onClose} />
           )}
-          
-          {images.length !== totalHits && (<Button text="Load More..." clickHandler={this.loadMore} />)}
-          
-        </div>
+          {images.length !== totalHits && (
+            <Button text="Load More..." clickHandler={this.loadMore} />
+          )}
+        </Section>
       );
-    }   
+    }
   }
-};
+}
 
 export default App;
 
